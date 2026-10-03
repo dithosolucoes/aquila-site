@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/*
+ * Aquila Design System — Jesper Landberg's system, applied to Aquila.
+ * One family (Geist, the free stand-in for ABC Diatype), sizes on a fluid unit
+ * that tracks the viewport width exactly like his site (1rem = 100vw / 150 on
+ * desktop, 100vw / 39 on phones), 10-unit uppercase labels, 14-unit text,
+ * 16–18-unit titles with tight tracking. Aquila keeps its logo, contour lines and 3D.
+ */
+
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-geist: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --color-ink: #000000;
+  --color-surface: #0a0a0a;
+  --color-raised: #161616;
+  --color-line: rgba(255, 255, 255, 0.18);
+  --color-paper: #ffffff;
+  --color-muted: rgba(255, 255, 255, 0.6);
+  --color-faint: rgba(255, 255, 255, 0.4);
+  --color-champagne: #dfceba;
+
+  --ease-shape: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-content: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The fluid unit (Jesper's rem), with a readable floor */
+:root {
+  --j: clamp(9px, calc(100vw / 39), 12px);
+}
+@media (min-width: 768px) {
+  :root {
+    --j: clamp(9px, calc(100vw / 150), 18px);
+  }
+}
+
+/* Type — Jesper's scale */
+@utility j-label {
+  font-family: var(--font-geist);
+  font-weight: 500;
+  font-size: calc(var(--j) * 1);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+@utility j-text {
+  font-family: var(--font-geist);
+  font-weight: 400;
+  font-size: calc(var(--j) * 1.4);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+@utility j-title {
+  font-family: var(--font-geist);
+  font-weight: 400;
+  font-size: calc(var(--j) * 1.8);
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+@utility j-heading {
+  font-family: var(--font-geist);
+  font-weight: 400;
+  font-size: calc(var(--j) * 2.8);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+@utility j-display {
+  font-family: var(--font-geist);
+  font-weight: 400;
+  font-size: calc(var(--j) * 5.2);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+@utility j-mono {
+  font-family: var(--font-geist-mono);
+  font-size: calc(var(--j) * 1);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Page chrome padding: Jesper's px-40 py-25 / s:px-80 s:py-40 */
+.j-chrome {
+  padding: calc(var(--j) * 2.5) calc(var(--j) * 4);
+}
+.j-gutter {
+  padding-left: calc(var(--j) * 4);
+  padding-right: calc(var(--j) * 4);
+}
+@media (min-width: 768px) {
+  .j-chrome {
+    padding: calc(var(--j) * 4) calc(var(--j) * 8);
+  }
+  .j-gutter {
+    padding-left: calc(var(--j) * 8);
+    padding-right: calc(var(--j) * 8);
+  }
+}
+
+@layer base {
+  :root {
+    /* Legacy Aquila font hooks now resolve to the single family */
+    --font-display: var(--font-geist);
+    --font-grotesk: var(--font-geist);
+    --font-body: var(--font-geist);
+  }
+
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    background-color: #000;
+    color: #fff;
+    font-family: var(--font-geist);
+    font-size: calc(var(--j) * 1.4);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
+
+  :focus-visible {
+    outline: 1px solid #fff;
+    outline-offset: 4px;
+  }
+}
+
+.font-display,
+.font-grotesk {
+  font-family: var(--font-geist);
+}
+
+.font-mono-code {
+  font-family: var(--font-geist-mono);
+}
+
+/* Subtle luxury grain */
+.bg-grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@keyframes scrollcue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
