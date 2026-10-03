@@ -212,7 +212,82 @@ export const MockPhoto: React.FC = () => (
   </div>
 );
 
-/** A full "presence" composite for the Today × Ideal comparison. */
+/** Visual identity sheet: palette, type pairing and applications. */
+export const MockIdentity: React.FC = () => (
+  <div className="bg-[#f4f1ec] text-black" style={{ borderRadius: u(1.2), padding: u(1.6) }}>
+    <p className="j-label opacity-50">Taberna do Largo · guia visual</p>
+    <div className="flex items-end justify-between" style={{ marginTop: u(1.4), gap: u(1) }}>
+      <p className="j-heading">
+        Aa <em>Aa</em>
+      </p>
+      <p className="j-label opacity-50 text-right">
+        Playfair Display
+        <br />
+        Inter
+      </p>
+    </div>
+    <div className="grid grid-cols-5" style={{ gap: u(0.4), marginTop: u(1.4) }}>
+      {['#1f1a17', '#7a2e1d', '#c9873f', '#e9dcc7', '#ffffff'].map((c) => (
+        <div key={c}>
+          <div className="aspect-square rounded-md border border-black/10" style={{ background: c }} />
+          <p className="j-mono opacity-50" style={{ marginTop: u(0.3), fontSize: u(0.8) }}>
+            {c.toUpperCase()}
+          </p>
+        </div>
+      ))}
+    </div>
+    <div className="grid grid-cols-3" style={{ gap: u(0.4), marginTop: u(1.2) }}>
+      {['Menu', 'Cartão', 'Post'].map((t, i) => (
+        <div key={t} className="relative aspect-[3/4] overflow-hidden rounded-md">
+          <FoodTile seed={i + 2} className="absolute inset-0" />
+          <span className="absolute j-label text-white" style={{ left: u(0.6), bottom: u(0.5) }}>
+            {t}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+/** One-page monthly report. */
+export const MockReport: React.FC = () => (
+  <div className="bg-white text-black" style={{ borderRadius: u(1.2), padding: u(1.6) }}>
+    <div className="flex items-center justify-between">
+      <p className="j-label opacity-50">Relatório · Março</p>
+      <p className="j-label opacity-50">1 página</p>
+    </div>
+    <div className="grid grid-cols-2" style={{ gap: u(1.2), marginTop: u(1.4) }}>
+      {[
+        ['Pesquisas no Google', '2.430', '+38%'],
+        ['Cliques no WhatsApp', '184', '+52%'],
+        ['Nota média', '4,8', '+0,3'],
+        ['Visitas ao site', '1.120', '+27%'],
+      ].map(([k, v, d]) => (
+        <div key={k} className="border-t border-black/10" style={{ paddingTop: u(0.8) }}>
+          <p className="j-label opacity-50">{k}</p>
+          <p className="j-heading" style={{ marginTop: u(0.3) }}>
+            {v}
+          </p>
+          <p className="j-label" style={{ color: '#1a7f37' }}>
+            {d}
+          </p>
+        </div>
+      ))}
+    </div>
+    <p className="j-label opacity-50" style={{ marginTop: u(1.4) }}>
+      Próximas ações
+    </p>
+    <ol className="j-text" style={{ marginTop: u(0.5) }}>
+      <li>1. Novas fotografias do menu de primavera</li>
+      <li>2. Responder às 6 avaliações em inglês</li>
+      <li>3. Ativar campanha para o fim de semana</li>
+    </ol>
+    <p className="j-label opacity-40" style={{ marginTop: u(1) }}>
+      Números ilustrativos
+    </p>
+  </div>
+);
+
 /** A full "presence" composite for the Today × Ideal comparison: site · Google · Instagram + messages. */
 export const MockPresence: React.FC<{ tone: MockTone }> = ({ tone }) => (
   <div className="grid h-full grid-cols-2 items-start md:grid-cols-3" style={{ gap: u(1.2), padding: u(1.6) }}>

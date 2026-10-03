@@ -64,8 +64,8 @@ export const AquilaNav: React.FC<AquilaNavProps> = ({
       >
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/5 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
           <svg viewBox="0 0 40 40" className="h-6 w-6" fill="none" aria-hidden="true">
-            <rect x="4" y="10" width="32" height="20" rx="10" stroke="white" strokeWidth="2.5" />
-            <path d="M14 28L20 14L28 32" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+            <rect x="4" y="10" width="32" height="20" rx="10" stroke="currentColor" strokeWidth="2.5" />
+            <path d="M14 28L20 14L28 32" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
         </span>
         <span className="hidden lg:flex flex-col">

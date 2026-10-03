@@ -366,7 +366,7 @@ export const TransatlanticCanvas: React.FC<TransatlanticCanvasProps> = ({
         if (zoomT < 0.5) {
           ctx.shadowBlur = 0;
           ctx.fillStyle = '#DFCEBA';
-          ctx.font = '500 10px "Geist", sans-serif';
+          ctx.font = '500 10px "Inter", sans-serif';
           ctx.fillText(`${origin.name.toUpperCase()}, ${origin.country.toUpperCase()}`, ox + 10, oy - 8);
         }
         ctx.restore();
@@ -400,7 +400,7 @@ export const TransatlanticCanvas: React.FC<TransatlanticCanvasProps> = ({
       if (sinceLanding >= 0) {
         ctx.save();
         const regionAlpha = clamp01(sinceLanding / 1200);
-        ctx.font = '500 10px "Geist", sans-serif';
+        ctx.font = '500 10px "Inter", sans-serif';
         for (const reg of PORTUGAL_REGIONS) {
           const r = projection(reg.coordinates);
           if (!r) continue;
@@ -422,7 +422,7 @@ export const TransatlanticCanvas: React.FC<TransatlanticCanvasProps> = ({
             ctx.fill();
           }
           ctx.fillStyle = isTarget ? '#FFFFFF' : '#DFCEBA';
-          ctx.font = isTarget ? '500 11px "Geist", sans-serif' : '500 10px "Geist", sans-serif';
+          ctx.font = isTarget ? '500 11px "Inter", sans-serif' : '500 10px "Inter", sans-serif';
           ctx.fillText(city.name.toUpperCase(), x + (isTarget ? 12 : 7), y - (isTarget ? 6 : 3));
         });
         ctx.restore();

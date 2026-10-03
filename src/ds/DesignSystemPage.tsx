@@ -9,9 +9,9 @@ import { Card, Label, PillAction, RoundButton, TextButton, unit } from '.';
 const TYPE = [
   { cls: 'j-label', name: 'Label', spec: '10 · 500 · maiúsculas', sample: 'Featured / Full, Profile, Newsletter' },
   { cls: 'j-text', name: 'Texto', spec: '14 · 1.4 · −2%', sample: 'Site, Google, fotografia e aquisição de clientes, entregues por um time que vai até a sua cidade.' },
-  { cls: 'j-title', name: 'Título', spec: '18 · 1.15 · −5%', sample: 'Casa Di Solare' },
-  { cls: 'j-heading', name: 'Chamada', spec: '28 · −5% · uma por tela', sample: 'Presença digital de verdade.' },
-  { cls: 'j-display', name: 'Número', spec: '52 · −5.5% · só para números', sample: '€1.000' },
+  { cls: 'j-title', name: 'Título', spec: 'Playfair 18 · 600', sample: 'Casa Di Solare' },
+  { cls: 'j-heading', name: 'Chamada', spec: 'Playfair 28 · 700 · uma por tela', sample: <>Conteúdo que faz seus pratos <em>venderem.</em></> },
+  { cls: 'j-display', name: 'Display', spec: 'Playfair 52 · 800', sample: '€1.000' },
 ];
 
 const COLORS = [
@@ -55,7 +55,7 @@ export default function DesignSystemPage() {
               O sistema do Jesper Landberg, vestindo a Aquila.
             </p>
             <p className="j-text opacity-70" style={{ marginTop: unit(2), maxWidth: unit(42) }}>
-              Uma família tipográfica, tamanhos que acompanham a largura da tela, labels pequenas em maiúsculas, botões
+              Títulos serifados com a última palavra em itálico, texto limpo, tamanhos que acompanham a largura da tela, labels pequenas em maiúsculas, botões
               redondos brancos e popups sem caixa. Da Aquila ficam o logo, as linhas de contorno, o fundo 3D e o voo.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function DesignSystemPage() {
             </p>
           </Row>
 
-          <Row title="Tipografia" note="Geist, a alternativa gratuita mais próxima da ABC Diatype do Jesper.">
+          <Row title="Tipografia" note="Da proposta da Áquila: Playfair Display nos títulos (última palavra em itálico) e Inter no texto.">
             <div className="flex flex-col" style={{ gap: unit(3) }}>
               {TYPE.map((t) => (
                 <div key={t.name} className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] items-baseline" style={{ gap: unit(1) }}>

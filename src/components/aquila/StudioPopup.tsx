@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PopupLine } from '../ui/ExpandPopup';
 import { PillAction, unit } from '../../ds';
 import { sound } from '../../utils/audio';
+import { CONTACT_EMAIL, whatsappHref } from '../../config/contact';
 
 const LINKS = [
   { label: 'Instagram', href: 'https://instagram.com' },
@@ -13,10 +14,10 @@ const EmailPill: React.FC = () => {
   const [copied, setCopied] = useState(false);
   return (
     <PillAction
-      label={copied ? 'Copiado' : 'studio@aquila.design'}
+      label={copied ? 'Copiado' : CONTACT_EMAIL}
       icon={copied ? '✓' : '⧉'}
       onClick={() => {
-        navigator.clipboard?.writeText('studio@aquila.design').catch(() => {});
+        navigator.clipboard?.writeText(CONTACT_EMAIL).catch(() => {});
         setCopied(true);
         window.setTimeout(() => setCopied(false), 2400);
       }}
@@ -69,26 +70,36 @@ export const StudioPopup: React.FC = () => (
   </>
 );
 
-/** Contact: the shortest possible lens content. */
-export const ContactPopup: React.FC = () => (
-  <>
-    <PopupLine>
-      <p className="j-title">Vamos conversar.</p>
-    </PopupLine>
-    <PopupLine>
-      <p className="j-text opacity-70 mx-auto" style={{ marginTop: unit(1.2), maxWidth: unit(30) }}>
-        Conte-nos sobre o seu negócio. Respondemos no mesmo dia útil.
-      </p>
-    </PopupLine>
-    <PopupLine>
-      <div style={{ marginTop: unit(2.5) }}>
-        <EmailPill />
-      </div>
-    </PopupLine>
-    <PopupLine className="w-full">
-      <div style={{ marginTop: unit(2.5) }}>
-        <Links />
-      </div>
-    </PopupLine>
-  </>
-);
+/** Contact: the shortest possible lens content. WhatsApp first, email as the alternative. */
+export const ContactPopup: React.FC = () => {
+  const wa = whatsappHref();
+  return (
+    <>
+      <PopupLine>
+        <p className="j-title">
+          Vamos <em>conversar.</em>
+        </p>
+      </PopupLine>
+      <PopupLine>
+        <p className="j-text opacity-70 mx-auto" style={{ marginTop: unit(1.2), maxWidth: unit(30) }}>
+          Diga-nos o nome do seu negócio. Enviamos o diagnóstico antes de qualquer conversa.
+        </p>
+      </PopupLine>
+      <PopupLine>
+        <div className="flex flex-col items-center" style={{ marginTop: unit(2.5), gap: unit(1) }}>
+          {wa ? (
+            <PillAction label="Falar no WhatsApp" onClick={() => window.open(wa, '_blank', 'noopener')} />
+          ) : (
+            <p className="j-label opacity-50">WhatsApp em breve</p>
+          )}
+          <EmailPill />
+        </div>
+      </PopupLine>
+      <PopupLine className="w-full">
+        <div style={{ marginTop: unit(2.5) }}>
+          <Links />
+        </div>
+      </PopupLine>
+    </>
+  );
+};

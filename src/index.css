@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 /*
- * Aquila Design System — Jesper Landberg's system, applied to Aquila.
- * One family (Geist, the free stand-in for ABC Diatype), sizes on a fluid unit
- * that tracks the viewport width exactly like his site (1rem = 100vw / 150 on
- * desktop, 100vw / 39 on phones), 10-unit uppercase labels, 14-unit text,
- * 16–18-unit titles with tight tracking. Aquila keeps its logo, contour lines and 3D.
+ * Aquila Design System — Jesper Landberg's system (fluid unit, scale, chrome,
+ * popups) dressed in Aquila's brand type from the commercial proposal:
+ * Playfair Display for titles (closing word in italic, via <em>) and Inter for
+ * text and labels. Sizes on a fluid unit that tracks the viewport width like his
+ * site (1rem = 100vw / 150 on desktop, 100vw / 39 on phones). Aquila keeps its
+ * logo, contour lines and 3D.
  */
 
 @theme {
-  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
-  --font-geist: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  /* Historical names: "geist" is the text family, now Inter */
+  --font-geist: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-geist-mono: 'Geist Mono', ui-monospace, monospace;
 
   --color-ink: #000000;
@@ -54,28 +57,87 @@
   letter-spacing: -0.02em;
 }
 @utility j-title {
-  font-family: var(--font-geist);
-  font-weight: 400;
+  font-family: var(--font-serif);
+  font-weight: 600;
   font-size: calc(var(--j) * 1.8);
   line-height: 1.15;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 @utility j-heading {
-  font-family: var(--font-geist);
-  font-weight: 400;
+  font-family: var(--font-serif);
+  font-weight: 700;
   font-size: calc(var(--j) * 2.8);
-  line-height: 1.05;
-  letter-spacing: -0.05em;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 @utility j-display {
-  font-family: var(--font-geist);
-  font-weight: 400;
+  font-family: var(--font-serif);
+  font-weight: 800;
   font-size: calc(var(--j) * 5.2);
-  line-height: 0.95;
-  letter-spacing: -0.055em;
+  line-height: 1;
+  letter-spacing: -0.02em;
   text-wrap: balance;
+}
+
+/*
+ * Two lights, from the proposal: ink (cinema) and paper (editorial).
+ * The Europe US page switches the whole viewport between them as acts change;
+ * the tokens are registered so the switch is a smooth cross-fade.
+ */
+@property --color-ink { syntax: '<color>'; inherits: true; initial-value: #000000; }
+@property --color-paper { syntax: '<color>'; inherits: true; initial-value: #ffffff; }
+@property --color-surface { syntax: '<color>'; inherits: true; initial-value: #0a0a0a; }
+@property --color-line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.18); }
+@property --color-champagne { syntax: '<color>'; inherits: true; initial-value: #dfceba; }
+@property --color-white { syntax: '<color>'; inherits: true; initial-value: #ffffff; }
+@property --color-black { syntax: '<color>'; inherits: true; initial-value: #000000; }
+
+.theme-switch {
+  transition:
+    --color-ink 0.8s var(--ease-content),
+    --color-paper 0.8s var(--ease-content),
+    --color-surface 0.8s var(--ease-content),
+    --color-line 0.8s var(--ease-content),
+    --color-champagne 0.8s var(--ease-content),
+    --color-white 0.8s var(--ease-content),
+    --color-black 0.8s var(--ease-content);
+}
+.theme-switch.is-paper {
+  --color-ink: #f3efe8;
+  --color-paper: #151311;
+  --color-surface: #e7e1d7;
+  --color-line: rgba(21, 19, 17, 0.16);
+  --color-champagne: #8a6a45;
+  --color-white: #151311;
+  --color-black: #f3efe8;
+}
+/* Photo cards, mockups and the lens stay in ink whatever the light */
+.theme-ink {
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-surface: #0a0a0a;
+  --color-line: rgba(255, 255, 255, 0.18);
+  --color-champagne: #dfceba;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  color: var(--color-paper);
+}
+
+/* Phones: body copy one step larger, owners read between services */
+@media (max-width: 767px) {
+  .j-text {
+    font-size: calc(var(--j) * 1.55);
+  }
+}
+
+/* The proposal's signature: the closing word of a title in italic */
+.j-title em,
+.j-heading em,
+.j-display em {
+  font-style: italic;
+  font-weight: 700;
 }
 @utility j-mono {
   font-family: var(--font-geist-mono);
