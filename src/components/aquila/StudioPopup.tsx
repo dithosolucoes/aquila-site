@@ -4,11 +4,7 @@ import { PillAction, unit } from '../../ds';
 import { sound } from '../../utils/audio';
 import { CONTACT_EMAIL, whatsappHref } from '../../config/contact';
 
-const LINKS = [
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'X', href: 'https://x.com' },
-  { label: 'GitHub', href: 'https://github.com' },
-];
+const LINKS = [{ label: 'Instagram', href: 'https://instagram.com' }];
 
 const EmailPill: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -47,14 +43,19 @@ const Links: React.FC = () => (
 export const StudioPopup: React.FC = () => (
   <>
     <PopupLine>
-      <p className="j-text mx-auto" style={{ maxWidth: unit(42) }}>
-        Aquila engineers visually rich, motion-driven spatial computing interfaces, WebGL installations, and digital brand
-        identities. Operating at the intersection of computational rigor and radical minimalism.
+      <p className="j-title">
+        Não fazemos peças. Fazemos o <em>conjunto.</em>
+      </p>
+    </PopupLine>
+    <PopupLine>
+      <p className="j-text mx-auto opacity-80" style={{ marginTop: unit(1.4), maxWidth: unit(42) }}>
+        A Áquila junta duas especialidades numa só equipa: a imagem, com a fotografia e o vídeo gastronómico do Raphael, e a
+        tecnologia, com o site, o Google, os anúncios e os sistemas do Thomas. Para restaurantes, cafés e padarias.
       </p>
     </PopupLine>
     <PopupLine>
       <p className="j-label opacity-60" style={{ marginTop: unit(2.5) }}>
-        18× Awwwards, 12× FWA, 4× Webby
+        Belo Horizonte · Lisboa · Porto
       </p>
     </PopupLine>
     <PopupLine className="w-full">

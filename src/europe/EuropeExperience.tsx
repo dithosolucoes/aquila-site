@@ -9,16 +9,6 @@ import type { OriginRect } from '../components/ui/ExpandPopup';
 import { sound } from '../utils/audio';
 
 const LANDING_DELAY_MS = 2600; // let the cities light up before the page arrives
-const RETURN_DELAY_MS = 1100; // returning visitors: a short look at the map, then the page
-const FLOWN_KEY = 'aquila:europe-flown';
-
-const hasFlown = () => {
-  try {
-    return window.localStorage.getItem(FLOWN_KEY) === '1';
-  } catch {
-    return false;
-  }
-};
 
 interface EuropeExperienceProps {
   onNavigate: (tab: NavigationTab) => void;
@@ -34,15 +24,13 @@ interface EuropeExperienceProps {
 export default function EuropeExperience({ onNavigate, onOpenAbout, onOpenContact }: EuropeExperienceProps) {
   const origin = LATIN_ORIGINS[0];
   const targetCity = PORTUGAL_CITIES[0];
-  // Returning visitors skip straight to the landing; "Rever o voo" plays it again
-  const [returning] = useState(hasFlown);
+  // The full flight plays every time; the HUD offers "Saltar", the footer "Rever o voo"
   const [run, setRun] = useState(0);
-  const [introDone, setIntroDone] = useState(returning);
+  const [introDone, setIntroDone] = useState(false);
   const [phase, setPhase] = useState<FlightPhase>('approach');
   const [progress, setProgress] = useState(0);
-  const [skipSignal, setSkipSignal] = useState(returning ? 1 : 0);
+  const [skipSignal, setSkipSignal] = useState(0);
   const [stage, setStage] = useState<'flight' | 'landing'>('flight');
-  const skipped = useRef(returning);
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,28 +45,20 @@ export default function EuropeExperience({ onNavigate, onOpenAbout, onOpenContac
 
   useEffect(() => {
     if (phase !== 'landed' || stage === 'landing') return;
-    const t = window.setTimeout(() => setStage('landing'), skipped.current ? RETURN_DELAY_MS : LANDING_DELAY_MS);
+    const t = window.setTimeout(() => setStage('landing'), LANDING_DELAY_MS);
     return () => window.clearTimeout(t);
   }, [phase, stage]);
 
   useEffect(() => {
-    if (stage !== 'landing') return;
-    sound.stopAmbient();
-    try {
-      window.localStorage.setItem(FLOWN_KEY, '1');
-    } catch {
-      /* private mode: the flight simply plays again next time */
-    }
+    if (stage === 'landing') sound.stopAmbient();
   }, [stage]);
 
   const skip = useCallback(() => {
-    skipped.current = true;
     setIntroDone(true);
     setSkipSignal((s) => s + 1);
   }, []);
 
   const replay = useCallback(() => {
-    skipped.current = false;
     const el = mapRef.current;
     if (el) {
       el.style.transform = '';

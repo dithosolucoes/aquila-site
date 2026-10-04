@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/lisboa", "destination": "/index.html" },
+    { "source": "/design-system", "destination": "/index.html" }
+  ]
+}

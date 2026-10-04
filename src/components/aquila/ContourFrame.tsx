@@ -1,5 +1,6 @@
 import React from 'react';
-import { Volume2, VolumeX, Box, Film, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Film } from 'lucide-react';
+import { foodPhoto } from '../../europe/photos';
 import { sound } from '../../utils/audio';
 import { OriginRect, rectFrom } from '../ui/ExpandPopup';
 import { AquilaNav, NavigationTab } from './AquilaNav';
@@ -119,44 +120,6 @@ export const ContourFrame: React.FC<ContourFrameProps> = ({
                   <Film className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                 </button>
               </div>
-
-              {/* Item 3: 3D Tilt perspective */}
-              <div className="relative flex items-center justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.click();
-                    onToggle3D();
-                  }}
-                  title={is3dEnabled ? 'Desativar Tilt 3D' : 'Ativar Tilt 3D'}
-                  className="group flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black text-neutral-300 transition-all hover:border-white hover:text-white hover:scale-110 cursor-pointer shadow-[0_0_12px_rgba(0,0,0,0.9)]"
-                >
-                  <Box
-                    className={`h-4 w-4 transition-transform ${
-                      is3dEnabled ? 'text-white' : 'text-neutral-500'
-                    }`}
-                  />
-                </button>
-              </div>
-
-              {/* Item 4: Glow / Aura mode */}
-              <div className="relative flex items-center justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.click();
-                    onToggleGlow();
-                  }}
-                  title={glowMode ? 'Modo Normal' : 'Modo Aura Luminescente'}
-                  className="group flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black text-neutral-300 transition-all hover:border-white hover:text-white hover:scale-110 cursor-pointer shadow-[0_0_12px_rgba(0,0,0,0.9)]"
-                >
-                  <Sparkles
-                    className={`h-4 w-4 ${
-                      glowMode ? 'text-white drop-shadow-[0_0_8px_white]' : 'text-neutral-500'
-                    }`}
-                  />
-                </button>
-              </div>
             </div>
 
             {/* Segmento inferior da linha vertical */}
@@ -171,6 +134,37 @@ export const ContourFrame: React.FC<ContourFrameProps> = ({
           <div className={`relative z-20 flex w-full items-center justify-center transition-all duration-300 ${activeTab === 'CASES' ? 'h-full flex-1 max-w-none px-0' : 'max-w-5xl px-4'}`}>
             {children}
           </div>
+
+          {/* Invitation to the season: Jesper's small media card, bottom-left */}
+          {activeTab === 'HOME' && <button
+            type="button"
+            onClick={() => {
+              sound.click();
+              onSelectTab?.('EUROPE');
+            }}
+            onPointerEnter={() => sound.hover()}
+            className="group absolute bottom-0 left-0 z-30 flex items-center rounded-2xl border border-white/15 bg-black/60 text-left backdrop-blur-md transition-colors duration-500 hover:border-white/40 cursor-pointer"
+            style={{ padding: 'calc(var(--j) * 0.6)', paddingRight: 'calc(var(--j) * 1.6)', gap: 'calc(var(--j) * 1.2)' }}
+          >
+            <span className="relative block flex-none overflow-hidden rounded-xl" style={{ width: 'calc(var(--j) * 6)', height: 'calc(var(--j) * 6)' }}>
+              <img
+                src={foodPhoto(1, 240)}
+                alt=""
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                draggable={false}
+              />
+            </span>
+            <span className="flex flex-col" style={{ gap: 'calc(var(--j) * 0.3)' }}>
+              <span className="j-label flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-champagne" />
+                Novo · Temporada 2026
+              </span>
+              <span className="j-title" style={{ fontSize: 'calc(var(--j) * 1.6)' }}>
+                Lisboa e <em>Porto.</em>
+              </span>
+              <span className="j-label opacity-50 transition-opacity group-hover:opacity-100">Ver a experiência →</span>
+            </span>
+          </button>}
         </div>
 
         {/* =====================================================================
@@ -192,7 +186,7 @@ export const ContourFrame: React.FC<ContourFrameProps> = ({
 
             <span className="hidden sm:inline-block opacity-40">/</span>
             <span className="hidden sm:inline-block opacity-50">
-              RADICAL DESIGN & HIGH PRECISION
+              Belo Horizonte · Lisboa · Porto
             </span>
           </div>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { foodPhoto, roomPhoto } from './photos';
 
 /**
  * Illustrative mockups drawn in HTML/CSS (no photos yet): a fictional local
@@ -9,29 +10,30 @@ import React from 'react';
 export type MockTone = 'today' | 'ideal';
 const u = (n: number) => `calc(var(--j) * ${n})`;
 
-/** Warm food-photo stand-in: layered gradients that read as plates under light. */
-export const FoodTile: React.FC<{ seed?: number; dull?: boolean; className?: string; style?: React.CSSProperties }> = ({
-  seed = 0,
-  dull = false,
-  className = '',
-  style,
-}) => {
-  const hues = [28, 18, 36, 12, 42, 24];
-  const h = hues[seed % hues.length];
-  // Out-of-focus "food photograph": warm light pools on a dark table, no literal shapes
-  const bg = dull
-    ? `linear-gradient(160deg, hsl(${h} 6% 34%), hsl(${h} 4% 22%))`
-    : `radial-gradient(ellipse 45% 38% at ${35 + (seed * 17) % 35}% ${40 + (seed * 23) % 25}%, hsl(${h + 6} 75% 70% / 0.95), transparent 70%),
-       radial-gradient(ellipse 30% 26% at ${62 + (seed * 13) % 22}% ${30 + (seed * 7) % 30}%, hsl(${h + 20} 40% 88% / 0.8), transparent 70%),
-       radial-gradient(ellipse 38% 30% at ${20 + (seed * 11) % 30}% ${72 + (seed * 5) % 18}%, hsl(${h - 8} 65% 42% / 0.9), transparent 72%),
-       radial-gradient(ellipse 25% 22% at ${78 - (seed * 9) % 20}% ${70 - (seed * 3) % 20}%, hsl(${h + 90} 25% 40% / 0.7), transparent 70%),
-       linear-gradient(${120 + seed * 30}deg, hsl(${h} 30% 10%), hsl(${h + 8} 35% 22%))`;
-  return (
-    <div className={`overflow-hidden ${className}`} style={style}>
-      <div className="h-full w-full scale-110" style={{ background: bg, filter: dull ? 'blur(1.5px) grayscale(0.6)' : 'blur(10px) saturate(1.15)' }} />
-    </div>
-  );
-};
+/**
+ * A food photograph. `dull` renders it the way an unprepared business shows it
+ * (grey, soft, underexposed) for the "today" side of comparisons.
+ */
+export const FoodTile: React.FC<{
+  seed?: number;
+  dull?: boolean;
+  room?: boolean;
+  width?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}> = ({ seed = 0, dull = false, room = false, width = 900, className = '', style }) => (
+  <div className={`${/\b(absolute|fixed)\b/.test(className) ? '' : 'relative '}overflow-hidden bg-[#1a1714] ${className}`} style={style}>
+    <img
+      src={room ? roomPhoto(seed, width) : foodPhoto(seed, width)}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      className="absolute inset-0 h-full w-full object-cover"
+      style={dull ? { filter: 'grayscale(0.85) brightness(0.75) contrast(0.85) blur(1px)' } : undefined}
+    />
+  </div>
+);
 
 const Line: React.FC<{ w: string; dark?: boolean; o?: number }> = ({ w, dark, o = 1 }) => (
   <div

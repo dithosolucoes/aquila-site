@@ -22,12 +22,18 @@ const EuropeExperience = lazy(() => import('./europe/EuropeExperience'));
 type View = 'home' | 'cases' | 'europe';
 type Popup = { kind: 'about' | 'contact' | 'reel'; origin: OriginRect } | null;
 
-export default function App() {
+export default function App({ initialView = 'home' }: { initialView?: 'home' | 'europe' }) {
   const [is3dEnabled, setIs3dEnabled] = useState(true);
   const [isSoundMuted, setIsSoundMuted] = useState(false);
   const [glowMode, setGlowMode] = useState(false);
   const [popup, setPopup] = useState<Popup>(null);
-  const [view, setView] = useState<View>('home');
+  const [view, setView] = useState<View>(initialView);
+
+  // Keep the address shareable: /lisboa while in Europe US, / elsewhere
+  useEffect(() => {
+    const target = view === 'europe' ? '/lisboa' : '/';
+    if (window.location.pathname !== target) window.history.replaceState(null, '', target);
+  }, [view]);
 
   const toggleSound = useCallback(() => {
     setIsSoundMuted((muted) => {

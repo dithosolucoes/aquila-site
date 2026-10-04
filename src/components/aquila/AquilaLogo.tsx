@@ -1,5 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { foodPhoto } from '../../europe/photos';
+
+/**
+ * The "technology" half of the logo: a site, a Google listing and a WhatsApp
+ * reply drawn in hairlines, in the right void's coordinate space (≈456–846 × 54–286).
+ */
+const TechScene: React.FC = () => (
+  <g className="pointer-events-none" fontFamily="'Inter', sans-serif">
+    <rect x="440" y="0" width="460" height="420" fill="#0b0b0b" />
+    {/* site window */}
+    <rect x="500" y="88" width="220" height="168" rx="10" fill="#141414" stroke="rgba(255,255,255,0.35)" />
+    <circle cx="514" cy="100" r="3" fill="rgba(255,255,255,0.4)" />
+    <circle cx="524" cy="100" r="3" fill="rgba(255,255,255,0.4)" />
+    <circle cx="534" cy="100" r="3" fill="rgba(255,255,255,0.4)" />
+    <rect x="552" y="96" width="120" height="8" rx="4" fill="rgba(255,255,255,0.12)" />
+    <image href={foodPhoto(1, 600)} x="510" y="112" width="200" height="86" preserveAspectRatio="xMidYMid slice" />
+    <text x="514" y="218" fill="#ffffff" fontSize="13" fontFamily="'Playfair Display', serif" fontWeight="700">
+      Taberna do Largo
+    </text>
+    <rect x="514" y="228" width="92" height="7" rx="3.5" fill="rgba(255,255,255,0.18)" />
+    <rect x="640" y="214" width="68" height="22" rx="11" fill="#ffffff" />
+    <text x="674" y="229" fill="#000" fontSize="9" fontWeight="600" textAnchor="middle" letterSpacing="0.5">
+      RESERVAR
+    </text>
+    {/* google listing */}
+    <rect x="730" y="96" width="104" height="70" rx="10" fill="#ffffff" />
+    <text x="740" y="116" fill="#111" fontSize="9" fontWeight="700">
+      4,8 ★★★★★
+    </text>
+    <text x="740" y="130" fill="rgba(0,0,0,0.55)" fontSize="8">
+      326 avaliações
+    </text>
+    <text x="740" y="152" fill="#1a7f37" fontSize="8" fontWeight="600">
+      ABERTO
+    </text>
+    {/* whatsapp reply */}
+    <rect x="730" y="178" width="104" height="44" rx="10" fill="#005c4b" />
+    <text x="740" y="196" fill="#fff" fontSize="8">
+      Reserva feita:
+    </text>
+    <text x="740" y="210" fill="#fff" fontSize="8">
+      hoje, 20h30 ✓
+    </text>
+  </g>
+);
 
 interface AquilaLogoProps {
   is3dEnabled?: boolean;
@@ -53,6 +98,29 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
     setIsInsideRight(false);
     setTorchPos({ x: -500, y: -500 });
   };
+
+  // Touch screens can't hover: the two halves light up in turn on their own
+  const [touch] = useState(() => window.matchMedia('(hover: none)').matches);
+  useEffect(() => {
+    if (!touch) return;
+    const steps = [
+      { l: true, r: false, x: 270, y: 170, ms: 2600 },
+      { l: false, r: true, x: 650, y: 170, ms: 2600 },
+      { l: false, r: false, x: -500, y: -500, ms: 1200 },
+    ];
+    let i = 0;
+    let t = 0;
+    const run = () => {
+      const s = steps[i % steps.length];
+      setIsInsideLeft(s.l);
+      setIsInsideRight(s.r);
+      setTorchPos({ x: s.x, y: s.y });
+      i += 1;
+      t = window.setTimeout(run, s.ms);
+    };
+    t = window.setTimeout(run, 1800);
+    return () => window.clearTimeout(t);
+  }, [touch]);
 
   const isRevealing = isInsideLeft || isInsideRight;
 
@@ -212,13 +280,12 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
               }}
             >
               <image
-                href="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
+                href={foodPhoto(0, 1200)}
                 x="0"
                 y="10"
                 width="460"
                 height="320"
                 preserveAspectRatio="xMidYMid slice"
-                filter="url(#bwFilter)"
                 className="pointer-events-none"
               />
 
@@ -244,7 +311,7 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
                 letterSpacing="2"
                 className="pointer-events-none uppercase font-semibold"
               >
-                AQUILA ARCHIVE // SEC-01
+                IMAGEM // RAPHAEL
               </text>
             </g>
 
@@ -281,16 +348,7 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
                 transition: 'opacity 0.3s ease-out',
               }}
             >
-              <image
-                href="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85"
-                x="440"
-                y="10"
-                width="460"
-                height="320"
-                preserveAspectRatio="xMidYMid slice"
-                filter="url(#bwFilter)"
-                className="pointer-events-none"
-              />
+              <TechScene />
 
               {/* Fine lens reticle overlay inside right space */}
               <circle
@@ -314,7 +372,7 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
                 letterSpacing="2"
                 className="pointer-events-none uppercase font-semibold"
               >
-                SPATIAL VISION // SEC-02
+                TECNOLOGIA // THOMAS
               </text>
             </g>
 
@@ -380,18 +438,28 @@ export const AquilaLogo: React.FC<AquilaLogoProps> = ({
           />
         </svg>
 
-        {/* Minimal indicator bar */}
-        <div className="mt-4 flex items-center justify-center gap-3 text-center">
-          <span className={`j-label transition-opacity duration-300 ${isRevealing ? 'opacity-100' : 'opacity-50'}`}>
-            {isRevealing ? (
+        {/* The idea, then what each half holds */}
+        <div className="flex flex-col items-center text-center" style={{ marginTop: 'calc(var(--j) * 1.6)', gap: 'calc(var(--j) * 0.8)' }}>
+          <p className="j-title" style={{ fontSize: 'calc(var(--j) * 2)' }}>
+            Não fazemos peças. Fazemos o <em>conjunto.</em>
+          </p>
+          <p className="j-label h-[1.4em] opacity-60" aria-live="polite">
+            {isInsideLeft ? (
               <span className="flex items-center gap-2">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-white animate-ping" />
-                Lente ativa, {isInsideLeft ? 'arquivo esquerdo revelado' : 'visão direita revelada'}
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
+                Imagem · fotografia e vídeo, por Raphael
               </span>
+            ) : isInsideRight ? (
+              <span className="flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
+                Tecnologia · site, Google e anúncios, por Thomas
+              </span>
+            ) : touch ? (
+              'Imagem e tecnologia, numa só equipa'
             ) : (
-              'Passe o mouse dentro da logo para descobrir'
+              'Explore a logo: imagem de um lado, tecnologia do outro'
             )}
-          </span>
+          </p>
         </div>
       </motion.div>
     </div>

@@ -125,6 +125,31 @@
   color: var(--color-paper);
 }
 
+/*
+ * The flight keeps its original instrument typography (Geist, light, tight):
+ * the cinema of the crossing reads as a cockpit, not as an editorial page.
+ */
+.flight-type,
+.flight-type .j-text,
+.flight-type .j-label {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+}
+.flight-type .j-title,
+.flight-type .j-heading {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+}
+.flight-type .j-title {
+  line-height: 1.15;
+}
+.flight-type .j-heading {
+  line-height: 1.05;
+}
+.flight-type .j-text {
+  font-size: calc(var(--j) * 1.4);
+}
+
 /* Phones: body copy one step larger, owners read between services */
 @media (max-width: 767px) {
   .j-text {

@@ -69,8 +69,8 @@ export const AquilaNav: React.FC<AquilaNavProps> = ({
           </svg>
         </span>
         <span className="hidden lg:flex flex-col">
-          <span className="j-label">Aquila</span>
-          <span className="j-label opacity-50">Autonomous design & digital craft</span>
+          <span className="j-label">Áquila</span>
+          <span className="j-label opacity-50">Imagem e tecnologia</span>
         </span>
       </button>
 
@@ -81,12 +81,11 @@ export const AquilaNav: React.FC<AquilaNavProps> = ({
         style={{ gap: 'calc(var(--j) * 2)', paddingInline: 'calc(var(--j) * 2)' }}
         aria-label="Menu principal"
       >
-        {item('HOME', 'Home', 'hidden sm:inline-block')}
-        {item('ABOUT', 'About', '', openAbout)}
-        {item('CASES', 'Cases')}
-        {item('EUROPE', 'Europe US')}
-        {item('ARTICLES', 'Articles', 'hidden xl:inline-block', () => {})}
-        {item('CONTACT', 'Contact', 'hidden sm:inline-block', openContact)}
+        {item('HOME', 'Início', 'hidden sm:inline-block')}
+        {item('ABOUT', 'Sobre', '', openAbout)}
+        {item('CASES', 'Trabalhos')}
+        {item('EUROPE', 'Lisboa 2026')}
+        {item('CONTACT', 'Contacto', 'hidden sm:inline-block', openContact)}
       </nav>
 
       <div className={`hidden sm:block h-[1px] w-16 md:w-32 lg:w-48 shrink-0 transition-colors duration-700 ${line}`} />

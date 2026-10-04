@@ -29,7 +29,7 @@ export const FlightIntro: React.FC<{ onDone: () => void }> = ({ onDone }) => {
 
   return (
     <motion.div
-      className="absolute inset-0 z-20 flex items-center justify-center bg-black"
+      className="flight-type absolute inset-0 z-20 flex items-center justify-center bg-black"
       exit={{ opacity: 0, transition: { duration: 1.2, ease: EASE } }}
     >
       <AnimatePresence mode="wait">
@@ -87,7 +87,7 @@ export const FlightHud: React.FC<FlightHudProps> = ({ origin, targetCity, phase,
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="pointer-events-none absolute inset-0 flex flex-col justify-between j-chrome"
+          className="flight-type pointer-events-none absolute inset-0 flex flex-col justify-between j-chrome"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 0.4, duration: 0.8 } }}
           exit={{ opacity: 0, transition: { duration: 0.6 } }}

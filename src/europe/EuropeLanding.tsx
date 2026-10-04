@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { AquilaNav, NavigationTab } from '../components/aquila/AquilaNav';
 import { OriginRect, rectFrom } from '../components/ui/ExpandPopup';
-import { SheetPopup } from '../components/ui/SheetPopup';
+import { SheetMedia, SheetPopup } from '../components/ui/SheetPopup';
 import { Label, PillAction, TextButton, unit } from '../ds';
 import { sound } from '../utils/audio';
 import { emailHref, whatsappHref } from '../config/contact';
@@ -114,9 +114,11 @@ type Side = 'Imagem' | 'Tecnologia' | 'Os dois';
 interface Sheet {
   id: string;
   title: string;
+  eyebrow?: string;
+  lead?: React.ReactNode;
   description: React.ReactNode;
   tags: string[];
-  media: React.ReactNode[];
+  media: SheetMedia[];
 }
 
 interface Arm {
@@ -127,7 +129,7 @@ interface Arm {
   body: string;
   have: string;
   tags: string[];
-  media: React.ReactNode[];
+  media: SheetMedia[];
 }
 
 const ARMS: Arm[] = [
@@ -139,7 +141,11 @@ const ARMS: Arm[] = [
     body: 'Sessão no seu espaço, com equipamento de cinema: pratos, sala, equipa e detalhes. Cada imagem pensada para o Google, o site, o Instagram e os anúncios, e vídeos verticais prontos a publicar.',
     have: 'As boas entram no conjunto. A sessão cobre o que falta.',
     tags: ['Sessão no local', 'Vídeo vertical', 'Edição'],
-    media: [<MockPhoto key="a" />, <MockSocial key="b" tone="ideal" />],
+    media: [
+      { node: <FoodTile seed={0} width={1600} className="h-full w-full" />, bleed: true, caption: 'Pratos com luz, textura e cor reais' },
+      { node: <FoodTile seed={5} width={1600} className="h-full w-full" />, bleed: true, caption: 'Uma imagem pensada para cada canal' },
+      { node: <MockSocial tone="ideal" />, caption: 'O banco de imagens a alimentar o Instagram' },
+    ],
   },
   {
     id: 'id',
@@ -149,7 +155,7 @@ const ARMS: Arm[] = [
     body: 'Cores, tipografia e aplicações afinadas para que o menu, o site, as redes e o espaço pareçam do mesmo sítio.',
     have: 'Se a marca já é forte, respeitamo-la e aplicamo-la em tudo.',
     tags: ['Cores', 'Tipografia', 'Aplicações'],
-    media: [<MockIdentity key="a" />],
+    media: [{ node: <MockIdentity />, caption: 'Guia visual: tipografia, cores e aplicações' }],
   },
   {
     id: 'site',
@@ -159,7 +165,10 @@ const ARMS: Arm[] = [
     body: 'Menu, fotografias, localização, horários e um caminho direto para reservar ou falar consigo. Rápido no telemóvel e em várias línguas.',
     have: 'Se já está no ideal, fica e passa a trabalhar com o resto. Se não está, ajustamos.',
     tags: ['Design', 'Várias línguas', 'Telemóvel'],
-    media: [<MockSite key="a" tone="ideal" />, <MockSite key="b" tone="today" />],
+    media: [
+      { node: <MockSite tone="ideal" />, caption: 'Ideal: menu, fotografias e reserva num toque' },
+      { node: <MockSite tone="today" />, caption: 'Hoje: um site que ninguém atualiza' },
+    ],
   },
   {
     id: 'google',
@@ -169,7 +178,10 @@ const ARMS: Arm[] = [
     body: 'Perfil completo e coerente com o site: categorias certas, horários, menu, fotografias novas e uma estratégia de avaliações.',
     have: 'Completamos o que falta e ligamo-lo a tudo o resto.',
     tags: ['Perfil do Google', 'SEO local', 'Avaliações'],
-    media: [<MockGoogle key="a" tone="ideal" />, <MockGoogle key="b" tone="today" />],
+    media: [
+      { node: <MockGoogle tone="ideal" />, caption: 'Ideal: perfil completo, fotografias novas, avaliações respondidas' },
+      { node: <MockGoogle tone="today" />, caption: 'Hoje: horário em falta e poucas avaliações' },
+    ],
   },
   {
     id: 'insta',
@@ -179,7 +191,10 @@ const ARMS: Arm[] = [
     body: 'Bio, destaques, capas, um banco de fotografias editadas e modelos de publicação prontos, feitos com as imagens da sessão.',
     have: 'Organizamos o que existe para contar a mesma história que o resto.',
     tags: ['Perfil', 'Destaques', 'Modelos'],
-    media: [<MockSocial key="a" tone="ideal" />, <MockSocial key="b" tone="today" />],
+    media: [
+      { node: <MockSocial tone="ideal" />, caption: 'Ideal: uma montra coerente com o resto' },
+      { node: <MockSocial tone="today" />, caption: 'Hoje: publicações sem fio condutor' },
+    ],
   },
   {
     id: 'whats',
@@ -189,7 +204,7 @@ const ARMS: Arm[] = [
     body: 'Perfil, catálogo, mensagens automáticas e etiquetas para organizar pedidos e reservas. O contacto deixa de depender de alguém ver a mensagem a tempo.',
     have: 'Configuramos o número que já usa. Nada muda para os seus clientes.',
     tags: ['WhatsApp Business', 'Automação', 'Reservas'],
-    media: [<MockWhatsApp key="a" />],
+    media: [{ node: <MockWhatsApp />, caption: 'Uma reserva feita em menos de um minuto' }],
   },
   {
     id: 'medir',
@@ -199,7 +214,7 @@ const ARMS: Arm[] = [
     body: 'Google Analytics, Search Console e contagem de cliques no WhatsApp, resumidos num relatório simples, numa só página.',
     have: 'Ligamos o que já mede e acrescentamos o que falta.',
     tags: ['Analytics', 'Search Console', 'Relatório'],
-    media: [<MockReport key="a" />],
+    media: [{ node: <MockReport />, caption: 'O relatório: uma página, três próximas ações' }],
   },
   {
     id: 'ads',
@@ -209,7 +224,10 @@ const ARMS: Arm[] = [
     body: 'Contas, pixel e públicos configurados, com as imagens certas à espera. Quando quiser crescer, é só ligar.',
     have: 'Revemos as contas e deixamo-las prontas a usar.',
     tags: ['Google Ads', 'Meta Ads', 'Públicos'],
-    media: [<MockAds key="a" />],
+    media: [
+      { node: <MockAds />, caption: 'Campanhas prontas a ligar' },
+      { node: <FoodTile seed={1} width={1600} className="h-full w-full" />, bleed: true, caption: 'As imagens da sessão, prontas para anunciar' },
+    ],
   },
 ];
 
@@ -229,7 +247,11 @@ const TEAM = [
     role: 'Fotografia e vídeo gastronómico, direção visual.',
     bio: 'Fotógrafo e videomaker gastronómico. Planeia cada sessão com uma lista de imagens pensada para o Google, o site, as redes e os anúncios, trabalha com equipamento de cinema e aprova cada imagem consigo, na hora.',
     tags: ['Fotografia', 'Vídeo', 'Direção visual'],
-    media: [<MockPhoto key="a" />],
+    media: [
+      { node: <FoodTile seed={0} width={1600} className="h-full w-full" />, bleed: true, caption: 'Portfólio completo em breve' },
+      { node: <FoodTile seed={6} width={1600} className="h-full w-full" />, bleed: true },
+      { node: <FoodTile seed={1} width={1600} className="h-full w-full" />, bleed: true },
+    ],
   },
   {
     id: 'thomas',
@@ -238,7 +260,11 @@ const TEAM = [
     role: 'Site, Google, anúncios e sistemas.',
     bio: 'Tecnologia e marketing. Constrói o site, o perfil do Google, o SEO, o WhatsApp, a medição e a estrutura de anúncios, e liga tudo para funcionar como um só.',
     tags: ['Site', 'Google', 'Anúncios', 'Sistemas'],
-    media: [<MockSite key="a" tone="ideal" />, <MockGoogle key="b" tone="ideal" />, <MockReport key="c" />],
+    media: [
+      { node: <MockSite tone="ideal" />, caption: 'Sites rápidos, feitos para o telemóvel' },
+      { node: <MockGoogle tone="ideal" />, caption: 'Google e SEO local' },
+      { node: <MockReport />, caption: 'Medição e relatório' },
+    ],
   },
 ];
 
@@ -889,15 +915,9 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
                         {
                           id: p.id,
                           title: p.name,
-                          description: (
-                            <>
-                              <p className="j-label opacity-50">{p.side}</p>
-                              <p style={{ marginTop: unit(1) }}>{p.bio}</p>
-                              <p className="opacity-50" style={{ marginTop: unit(1) }}>
-                                Retrato e portfólio completo em breve.
-                              </p>
-                            </>
-                          ),
+                          eyebrow: p.side,
+                          lead: p.role,
+                          description: <p>{p.bio}</p>,
                           tags: p.tags,
                           media: p.media,
                         },
@@ -909,7 +929,8 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
                   >
                     <FoodTile
                       seed={i * 3 + 1}
-                      className="absolute inset-0 opacity-25 transition-all duration-[1.2s] ease-[var(--ease-content)] group-hover:scale-105 group-hover:opacity-45"
+                      room={p.id === 'thomas'}
+                      className="absolute inset-0 opacity-50 transition-all duration-[1.2s] ease-[var(--ease-content)] group-hover:scale-105 group-hover:opacity-75"
                     />
                     <span className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                     <span className="absolute j-label rounded-full bg-black/50" style={{ top: unit(1.6), left: unit(1.6), padding: `${unit(0.5)} ${unit(1)}` }}>
@@ -1019,17 +1040,15 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
                         {
                           id: s.id,
                           title: s.title,
+                          eyebrow: `${String(i + 1).padStart(2, '0')} · ${s.side}`,
+                          lead: s.line,
                           description: (
                             <>
-                              <p className="j-label opacity-50">{s.side}</p>
-                              <p className="opacity-70" style={{ marginTop: unit(1) }}>
-                                <em className="font-serif">{s.line}</em>
-                              </p>
-                              <p style={{ marginTop: unit(1.6) }}>{s.body}</p>
-                              <p className="j-label opacity-50" style={{ marginTop: unit(2) }}>
-                                Já tem?
-                              </p>
-                              <p style={{ marginTop: unit(0.4) }}>{s.have}</p>
+                              <p>{s.body}</p>
+                              <div className="border-t border-black/10" style={{ marginTop: unit(2), paddingTop: unit(1.2) }}>
+                                <p className="j-label text-black/45">Já tem?</p>
+                                <p style={{ marginTop: unit(0.4) }}>{s.have}</p>
+                              </div>
                             </>
                           ),
                           tags: s.tags,
@@ -1044,7 +1063,7 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
                   >
                     <FoodTile
                       seed={i}
-                      className="absolute inset-0 opacity-30 transition-all duration-[1.2s] ease-[var(--ease-content)] group-hover:scale-105 group-hover:opacity-60"
+                      className="absolute inset-0 opacity-55 transition-all duration-[1.2s] ease-[var(--ease-content)] group-hover:scale-105 group-hover:opacity-85"
                     />
                     <span className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                     <span className="absolute flex items-start justify-between" style={{ top: unit(1.6), left: unit(1.8), right: unit(1.6), gap: unit(1) }}>
@@ -1086,7 +1105,7 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
                     className="theme-ink relative flex-none overflow-hidden bg-surface"
                     style={{ width: 'min(78vw, 46rem)', height: 'min(52svh, 30rem)', borderRadius: unit(2) }}
                   >
-                    <FoodTile seed={i + 1} className="absolute inset-0 opacity-40" />
+                    <FoodTile seed={i + 2} className="absolute inset-0 opacity-50" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
                     <span
                       aria-hidden="true"
@@ -1324,6 +1343,8 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
             origin={sheet.origin}
             onClose={() => setSheet(null)}
             title={sheet.item.title}
+            eyebrow={sheet.item.eyebrow}
+            lead={sheet.item.lead}
             description={sheet.item.description}
             tags={sheet.item.tags}
             media={sheet.item.media}
@@ -1331,15 +1352,27 @@ export const EuropeLanding: React.FC<EuropeLandingProps> = ({
               <button
                 type="button"
                 onClick={(e) => {
-                  const el = e.currentTarget;
-                  const r = rectFrom(el, 999);
+                  const r = rectFrom(e.currentTarget, 999);
+                  sound.click();
                   setSheet(null);
                   window.setTimeout(() => onOpenContact(r), 700);
                 }}
-                className="j-text inline-flex items-center rounded-full bg-black text-white cursor-pointer transition-transform hover:scale-[1.02]"
-                style={{ height: unit(4.5), paddingInline: unit(2) }}
+                className="group inline-flex items-center cursor-pointer"
+                style={{ gap: unit(0.8) }}
               >
-                Pedir diagnóstico
+                <span
+                  className="flex items-center rounded-full bg-black/[0.06] j-text transition-colors duration-300 group-hover:bg-black/[0.1]"
+                  style={{ height: unit(4.5), paddingInline: unit(2) }}
+                >
+                  Pedir diagnóstico
+                </span>
+                <span
+                  className="flex items-center justify-center rounded-full bg-black text-white transition-transform duration-500 group-hover:rotate-45"
+                  style={{ width: unit(4.5), height: unit(4.5), fontSize: unit(1.6) }}
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
               </button>
             }
           />
